@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">ZMapMarker</string>
+
+    <string name="hello_world">哈哈，笨崽崽！!</string>
+    <string name="action_settings">Settings</string>
+</resources>
