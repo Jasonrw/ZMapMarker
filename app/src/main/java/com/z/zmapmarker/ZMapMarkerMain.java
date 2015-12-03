@@ -58,7 +58,7 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
     BitmapDescriptor bdA = BitmapDescriptorFactory
             .fromResource(R.drawable.icon_marka);
     List<Marker> markers = new ArrayList<Marker>();
-
+    ShopManager mShopManager;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,7 +90,8 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
 //改变地图状态
         mBaiduMap.setMapStatus(mMapStatusUpdate);
         // 初始化收藏夹
-        FavoriteManager.getInstance().init();
+        //FavoriteManager.getInstance().init();
+        this.mShopManager = new ShopManager(this);
         // 初始化UI
         initUI();
     }
@@ -118,8 +119,8 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
                     .show();
             return;
         }
-        FavoritePoiInfo info = new FavoritePoiInfo();
-        info.poiName(nameText.getText().toString());
+        Shop info = new Shop();
+        info.setShopName(nameText.getText().toString());
 
         LatLng pt;
         try {
@@ -127,8 +128,9 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
             String lat = strPt.substring(0, strPt.indexOf(","));
             String lng = strPt.substring(strPt.indexOf(",") + 1);
             pt = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
-            info.pt(pt);
-            if (FavoriteManager.getInstance().add(info) == 1) {
+            info.setLat(pt.latitude);
+            info.setLon(pt.longitude);
+            if (this.mShopManager.add(info) == 0) {
                 Toast.makeText(ZMapMarkerMain.this, "添加成功", Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(ZMapMarkerMain.this, "添加失败", Toast.LENGTH_LONG).show();
@@ -156,7 +158,7 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
         mdifyName = (EditText) mModify.findViewById(R.id.modifyedittext);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(mModify);
-        String oldName = FavoriteManager.getInstance().getFavPoi(currentID).getPoiName();
+        String oldName = this.mShopManager.getShop(currentID).getShopName();
         mdifyName.setText(oldName);
         builder.setPositiveButton("确认", new OnClickListener() {
             @Override
@@ -164,9 +166,9 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
                 String newName = mdifyName.getText().toString();
                 if (newName != null && !newName.equals("")) {
                     // modify
-                    FavoritePoiInfo info = FavoriteManager.getInstance().getFavPoi(currentID);
-                    info.poiName(newName);
-                    if (FavoriteManager.getInstance().updateFavPoi(currentID, info)) {
+                    Shop info = ShopManager.getInstance().getShop(currentID);
+                    info.setShopName(newName);
+                    if (ShopManager.getInstance().updateShop(currentID, info)) {
                         Toast.makeText(ZMapMarkerMain.this, "修改成功", Toast.LENGTH_LONG).show();
                     }
                 } else {
@@ -193,7 +195,7 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
      * @param v
      */
     public void deleteOneClick(View v) {
-        if (FavoriteManager.getInstance().deleteFavPoi(currentID)) {
+        if (this.mShopManager.deleteShop(Integer.getInteger(currentID))) {
             Toast.makeText(ZMapMarkerMain.this, "删除点成功", Toast.LENGTH_LONG).show();
             if (markers != null) {
                 for (int i = 0; i < markers.size(); i++) {
@@ -217,7 +219,7 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
      */
     public void getAllClick(View v) {
         mBaiduMap.clear();
-        List<FavoritePoiInfo> list = FavoriteManager.getInstance().getAllFavPois();
+        List<Shop> list = this.mShopManager.getAllShop();
         if (list == null || list.size() == 0) {
             Toast.makeText(ZMapMarkerMain.this, "没有收藏点", Toast.LENGTH_LONG).show();
             return;
@@ -227,7 +229,7 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
         for (int i = 0; i < list.size(); i++) {
             MarkerOptions option = new MarkerOptions().icon(bdA).position(list.get(i).getPt());
             Bundle b = new Bundle();
-            b.putString("id", list.get(i).getID());
+            b.putString("id", list.get(i).getId());
             option.extraInfo(b);
             markers.add((Marker) mBaiduMap.addOverlay(option));
         }
@@ -240,7 +242,7 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
      * @param v
      */
     public void deleteAllClick(View v) {
-        if (FavoriteManager.getInstance().clearAllFavPois()) {
+        if (this.mShopManager.deleteAll()) {
             Toast.makeText(ZMapMarkerMain.this, "全部删除成功", Toast.LENGTH_LONG).show();
             mBaiduMap.clear();
             mBaiduMap.hideInfoWindow();
@@ -266,7 +268,7 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
     @Override
     protected void onDestroy() {
         // 释放收藏夹功能资源
-        FavoriteManager.getInstance().destroy();
+        this.mShopManager.destroy();
         bdA.recycle();
         // MapView的生命周期与Activity同步，当activity销毁时需调用MapView.destroy()
         mMapView.onDestroy();
