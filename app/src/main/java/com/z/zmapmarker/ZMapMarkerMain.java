@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -31,6 +32,7 @@ import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.model.LatLng;
 
+import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,6 +73,10 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
         registerReceiver(mReceiver, iFilter);
         setContentView(R.layout.activity_favorite);
 
+        Intent startTrace = new Intent(this, TraceZ.class);
+        startService(startTrace);
+
+
         // 初始化地图
         //LatLng p = new LatLng(27.67, 113.5);
         mMapView = (MapView) findViewById(R.id.bmapView);
@@ -94,6 +100,7 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
         this.mShopManager = new ShopManager(this);
         // 初始化UI
         initUI();
+
     }
 
     public void initUI() {
