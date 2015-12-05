@@ -21,6 +21,7 @@ import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BaiduMap.OnMapClickListener;
 import com.baidu.mapapi.map.BaiduMap.OnMapLongClickListener;
 import com.baidu.mapapi.map.BaiduMap.OnMarkerClickListener;
+import com.baidu.mapapi.map.BaiduMapOptions;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.InfoWindow;
@@ -57,9 +58,12 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
     private RadioButton DQmass;
     private RadioButton DQnormal;
     private RadioButton DQless;
+    private RadioButton DQnone;
+
     EditText mdifyName;
     // 保存点中的点id
     private String currentID;
+    private LatLng currentPt;
     // 现实marker的图标
     BitmapDescriptor bdA = BitmapDescriptorFactory
             .fromResource(R.drawable.icon_marka);
@@ -105,19 +109,23 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
         MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
 //改变地图状态
         mBaiduMap.setMapStatus(mMapStatusUpdate);
+        //初始化currentPt
+        currentPt = null;
         // 初始化收藏夹
         //FavoriteManager.getInstance().init();
         this.mShopManager = new ShopManager(this);
         // 初始化UI
         initUI();
-
+        //显示所有收藏点
+        showAllShops();
     }
 
     public void initUI() {
-        locationText = (EditText) findViewById(R.id.pt);
+        //locationText = (EditText) findViewById(R.id.pt);
         nameText = (EditText) findViewById(R.id.name);
         LayoutInflater mInflater = getLayoutInflater();
         mPop = (View) mInflater.inflate(R.layout.activity_favorite_infowindow, null, false);
+        DQnone = (RadioButton) findViewById(R.id.DQnone);
         DQless = (RadioButton) findViewById(R.id.DQless);
         DQnormal = (RadioButton) findViewById(R.id.DQnormal);
         DQmass = (RadioButton) findViewById(R.id.DQmass);
@@ -134,8 +142,8 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
                     .show();
             return;
         }
-        if (locationText.getText().toString() == null || locationText.getText().toString().equals("")) {
-            Toast.makeText(ZMapMarkerMain.this, "坐标点必填", Toast.LENGTH_LONG)
+        if (currentPt==null) {
+            Toast.makeText(ZMapMarkerMain.this, "请先选择点", Toast.LENGTH_LONG)
                     .show();
             return;
         }
@@ -144,10 +152,10 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
 
         LatLng pt;
         try {
-            String strPt = locationText.getText().toString();
-            String lat = strPt.substring(0, strPt.indexOf(","));
-            String lng = strPt.substring(strPt.indexOf(",") + 1);
-            pt = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
+            //String strPt = locationText.getText().toString();
+            //String lat = String.valueOf(currentPt.latitude);
+            //String lng = String.valueOf(currentPt.longitude);
+            pt = new LatLng(currentPt.latitude, currentPt.longitude);
             info.setLat(pt.latitude);
             info.setLon(pt.longitude);
             int distributionQuantity = getDQFromInterface();
@@ -163,7 +171,7 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
             Toast.makeText(ZMapMarkerMain.this, "坐标解析错误", Toast.LENGTH_LONG)
                     .show();
         }
-
+        showAllShops();
 
 
     }
@@ -179,7 +187,8 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
             return 2;
         else if(DQmass.isChecked())
             return 3;
-        return 0;
+        else
+            return 0;
 
     }
 
@@ -256,6 +265,14 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
      * @param v
      */
     public void getAllClick(View v) {
+        showAllShops();
+
+    }
+
+    /**
+     * 显示所有收藏点
+     */
+    public void showAllShops(){
         mBaiduMap.clear();
         List<Shop> list = this.mShopManager.getAllShop();
         if (list == null || list.size() == 0) {
@@ -333,7 +350,14 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
     @Override
     public void onMapLongClick(LatLng point) {
         // TODO Auto-generated method stub
-        locationText.setText(String.valueOf(point.latitude) + "," + String.valueOf(point.longitude));
+        showAllShops();
+        //locationText.setText(String.valueOf(point.latitude) + "," + String.valueOf(point.longitude));
+        currentPt = point;
+        MarkerOptions option = new MarkerOptions().icon(bdA).position(point);
+        Bundle b = new Bundle();
+        b.putString("id", "temp");//临时点
+        option.extraInfo(b);
+        markers.add((Marker) mBaiduMap.addOverlay(option));
     }
 
     @Override
@@ -343,12 +367,19 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
         if (marker == null) {
             return false;
         }
-        InfoWindow mInfoWindow = new InfoWindow(mPop, marker.getPosition(), -47);
-        mBaiduMap.showInfoWindow(mInfoWindow);
-        MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(marker.getPosition());
-        mBaiduMap.setMapStatus(update);
+
         currentID = marker.getExtraInfo().getString("id");
-        return true;
+        if(currentID.equals("temp"))
+            return false;
+        else {
+            InfoWindow mInfoWindow = new InfoWindow(mPop, marker.getPosition(), -47);
+            mBaiduMap.showInfoWindow(mInfoWindow);
+            MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(marker.getPosition());
+            mBaiduMap.setMapStatus(update);
+            //currentID = marker.getExtraInfo().getString("id");
+
+            return true;
+        }
     }
 
     @Override

@@ -24,34 +24,12 @@
             android:layout_marginTop="10dip"
             android:layout_weight="1.0"
 		     android:orientation="vertical" >
-		     <LinearLayout
-		        android:id="@+id/editpt"
-		        android:layout_width="fill_parent"
-		        android:layout_height="wrap_content"
-		        android:orientation="horizontal" >
-		
-		        <TextView
-		            android:id="@+id/textpt"
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"
-		            android:text="经纬度：" />
-		
-		        <EditText
-		            android:id="@+id/pt"
-		            android:layout_width="fill_parent"
-		            android:layout_height="wrap_content"
-		            android:ems="10"
-		            android:text="" >
-		
-		            <requestFocus />
-		        </EditText>
-		    </LinearLayout>
+
 		
 		    <LinearLayout
 				android:id="@+id/editname"
 		        android:layout_width="fill_parent"
 		        android:layout_height="wrap_content"
-		        android:layout_below="@+id/editpt"
 		        android:orientation="horizontal" >
 		
 		        <TextView
@@ -98,12 +76,18 @@
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:id="@+id/DQnormal"
-						android:text="一般"/>
+						android:text="中"/>
 					<RadioButton
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:id="@+id/DQless"
 						android:text="少"/>
+					<RadioButton
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:checked="true"
+						android:id="@+id/DQnone"
+						android:text="无"/>
 
 				</RadioGroup>
 
@@ -124,36 +108,7 @@
     </LinearLayout>
 	
      
-	<LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
 
-        <Button
-            android:id="@+id/searchall"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_marginBottom="10dip"
-            android:layout_marginLeft="10dip"
-            android:layout_marginRight="10dip"
-            android:layout_marginTop="10dip"
-            android:layout_weight="1.0"
-            android:onClick="getAllClick"
-            android:text="查看全部" />
-
-        <Button
-            android:id="@+id/deleteall"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_marginBottom="10dip"
-            android:layout_marginLeft="10dip"
-            android:layout_marginRight="10dip"
-            android:layout_marginTop="10dip"
-            android:layout_weight="1.0"
-            android:onClick="deleteAllClick"
-            android:text="删除全部" />
-
-    </LinearLayout>
     
 
     

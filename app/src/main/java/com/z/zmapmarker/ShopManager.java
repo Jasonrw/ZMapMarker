@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.baidu.mapapi.common.Logger;
 import com.baidu.mapapi.model.LatLng;
 
 import java.util.ArrayList;
@@ -59,13 +60,19 @@ public class ShopManager {
         //To add single shopInfo to the manager and database
         //验证是否是同一个点
         LatLng pt = shop.getPt();
-        Iterator<Shop> iterShop = this.shops.iterator();
+        LatLng tmpPt;
+        Iterator<Shop> iterShop = shops.iterator();
         while(iterShop.hasNext()){
             Shop cShop = iterShop.next();
-            if(cShop.getPt().equals(shop.getPt()));
+            tmpPt = cShop.getPt();
+            if(tmpPt.latitude == pt.latitude && tmpPt.longitude == pt.longitude){
+                //Logger.logD("shop ------->", String.valueOf(shop.getLat()));
+                //System.out.print("shops ------->" + cShop.getLat());
                 return 1;
+            }
+
         }
-        this.shops.add(shop);
+        shops.add(shop);
         //Insert into Database
         this.db.insertOrThrow(ShopInfoDBContract.ShopDb.TABLENAME, ShopInfoDBContract.ShopDb.COLUMN_NAME_NULLABLE, shop.toContentValues());
         return 0;
