@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.baidu.mapapi.SDKInitializer;
@@ -53,12 +54,21 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
     private EditText nameText;
     private View mPop;
     private View mModify;
+    private RadioButton DQmass;
+    private RadioButton DQnormal;
+    private RadioButton DQless;
     EditText mdifyName;
     // 保存点中的点id
     private String currentID;
     // 现实marker的图标
     BitmapDescriptor bdA = BitmapDescriptorFactory
             .fromResource(R.drawable.icon_marka);
+    BitmapDescriptor DQmassMark = BitmapDescriptorFactory
+            .fromResource(R.drawable.star);
+    BitmapDescriptor DQnormalMark = BitmapDescriptorFactory
+            .fromResource(R.drawable.square);
+    BitmapDescriptor DQlessMark = BitmapDescriptorFactory
+            .fromResource(R.drawable.circle);
     List<Marker> markers = new ArrayList<Marker>();
     ShopManager mShopManager;
     @Override
@@ -108,6 +118,9 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
         nameText = (EditText) findViewById(R.id.name);
         LayoutInflater mInflater = getLayoutInflater();
         mPop = (View) mInflater.inflate(R.layout.activity_favorite_infowindow, null, false);
+        DQless = (RadioButton) findViewById(R.id.DQless);
+        DQnormal = (RadioButton) findViewById(R.id.DQnormal);
+        DQmass = (RadioButton) findViewById(R.id.DQmass);
     }
 
     /**
@@ -137,6 +150,8 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
             pt = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
             info.setLat(pt.latitude);
             info.setLon(pt.longitude);
+            int distributionQuantity = getDQFromInterface();
+            info.setDistributionQuantity(distributionQuantity);
             if (this.mShopManager.add(info) == 0) {
                 Toast.makeText(ZMapMarkerMain.this, "添加成功", Toast.LENGTH_LONG).show();
             } else {
@@ -149,6 +164,22 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
                     .show();
         }
 
+
+
+    }
+
+    /**
+     * 获取用户界面的铺货量
+     *
+     */
+    public int getDQFromInterface(){
+        if(DQless.isChecked())
+            return 1;
+        else if(DQnormal.isChecked())
+            return 2;
+        else if(DQmass.isChecked())
+            return 3;
+        return 0;
 
     }
 
@@ -202,7 +233,7 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
      * @param v
      */
     public void deleteOneClick(View v) {
-        if (this.mShopManager.deleteShop(Integer.getInteger(currentID))) {
+        if (this.mShopManager.deleteShop(currentID)) {
             Toast.makeText(ZMapMarkerMain.this, "删除点成功", Toast.LENGTH_LONG).show();
             if (markers != null) {
                 for (int i = 0; i < markers.size(); i++) {
@@ -234,7 +265,21 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
         // 绘制在地图
         markers.clear();
         for (int i = 0; i < list.size(); i++) {
-            MarkerOptions option = new MarkerOptions().icon(bdA).position(list.get(i).getPt());
+            MarkerOptions option;
+            switch (list.get(i).getDistributionQuantity()) {
+                case 1:
+                    option = new MarkerOptions().icon(DQlessMark).position(list.get(i).getPt());
+                    break;
+                case 2:
+                    option = new MarkerOptions().icon(DQnormalMark).position(list.get(i).getPt());
+                    break;
+                case 3:
+                    option = new MarkerOptions().icon(DQmassMark).position(list.get(i).getPt());
+                    break;
+                default:
+                    option = new MarkerOptions().icon(bdA).position(list.get(i).getPt());
+                    break;
+            }
             Bundle b = new Bundle();
             b.putString("id", list.get(i).getId());
             option.extraInfo(b);

@@ -85,24 +85,26 @@
 
 				<RadioGroup
 					android:layout_width="fill_parent"
-					android:layout_height="wrap_content">
-					<LinearLayout
-						android:layout_width="fill_parent"
-						android:layout_height="wrap_content"
-						android:id="@+id/DQRadioGroup">
+					android:layout_height="wrap_content"
+					android:orientation="horizontal"
+					android:id="@+id/DQRadioGroup">
+
 					<RadioButton
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
+						android:id="@+id/DQmass"
 						android:text="多"/>
 					<RadioButton
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
+						android:id="@+id/DQnormal"
 						android:text="一般"/>
 					<RadioButton
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
+						android:id="@+id/DQless"
 						android:text="少"/>
-					</LinearLayout>
+
 				</RadioGroup>
 
 

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.baidu.mapapi.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -35,7 +37,7 @@ public class ShopManager {
                 null,
                 null,
                 null
-                );
+        );
         //如果cursor不为空就同步数据库中的结果
         if(cursor.getCount()>0)
         {
@@ -55,6 +57,14 @@ public class ShopManager {
     }
     public int add(Shop shop){
         //To add single shopInfo to the manager and database
+        //验证是否是同一个点
+        LatLng pt = shop.getPt();
+        Iterator<Shop> iterShop = this.shops.iterator();
+        while(iterShop.hasNext()){
+            Shop cShop = iterShop.next();
+            if(cShop.getPt().equals(shop.getPt()));
+                return 1;
+        }
         this.shops.add(shop);
         //Insert into Database
         this.db.insertOrThrow(ShopInfoDBContract.ShopDb.TABLENAME, ShopInfoDBContract.ShopDb.COLUMN_NAME_NULLABLE, shop.toContentValues());
@@ -75,9 +85,17 @@ public class ShopManager {
         return shops;
     }
 
-    public boolean deleteShop(int id){
+    public boolean deleteShop(String id){
         //To delete the specific Shop
-        return true;
+        for(int i = 0;i<shops.size();i++){
+            if(shops.get(i).getId().equals(id)){
+                shops.remove(i);
+                String[] ids = {id};
+                this.db.delete(ShopInfoDBContract.ShopDb.TABLENAME, ShopInfoDBContract.ShopDb._ID+"=",ids);
+                return true;
+            }
+        }
+        return false;
     }
     public boolean deleteAll(){
         return true;
