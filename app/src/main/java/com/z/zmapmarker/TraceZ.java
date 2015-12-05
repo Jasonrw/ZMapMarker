@@ -82,7 +82,7 @@ public class TraceZ extends Service {
         // 初始化轨迹服务
         trace = new Trace(getApplicationContext(), serviceId, entityName, traceType);
 
-        showMessage("service is creating", 0);
+        //showMessage("service is creating", 0);
 
 
     }
@@ -144,7 +144,7 @@ public class TraceZ extends Service {
             // 开启轨迹服务回调接口（arg0 : 消息编码，arg1 : 消息内容，详情查看类参考）
             public void onTraceCallback(int arg0, String arg1) {
                 // TODO Auto-generated method stub
-                showMessage("开启轨迹服务回调接口消息 [消息编码 : " + arg0 + "，消息内容 : " + arg1 + "]", Integer.valueOf(arg0));
+                //showMessage("开启轨迹服务回调接口消息 [消息编码 : " + arg0 + "，消息内容 : " + arg1 + "]", Integer.valueOf(arg0));
                 if (0 == arg0 || 10006 == arg0) {
                     isTraceStart = true;
                 }
