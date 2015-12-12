@@ -32,6 +32,7 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.map.TextOptions;
 import com.baidu.mapapi.model.LatLng;
 
 import java.lang.annotation.Target;
@@ -129,6 +130,8 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
         DQless = (RadioButton) findViewById(R.id.DQless);
         DQnormal = (RadioButton) findViewById(R.id.DQnormal);
         DQmass = (RadioButton) findViewById(R.id.DQmass);
+        //显示所有收藏点
+        //showAllShops();
     }
 
     /**
@@ -282,25 +285,12 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
         // 绘制在地图
         markers.clear();
         for (int i = 0; i < list.size(); i++) {
-            MarkerOptions option;
-            switch (list.get(i).getDistributionQuantity()) {
-                case 1:
-                    option = new MarkerOptions().icon(DQlessMark).position(list.get(i).getPt());
-                    break;
-                case 2:
-                    option = new MarkerOptions().icon(DQnormalMark).position(list.get(i).getPt());
-                    break;
-                case 3:
-                    option = new MarkerOptions().icon(DQmassMark).position(list.get(i).getPt());
-                    break;
-                default:
-                    option = new MarkerOptions().icon(bdA).position(list.get(i).getPt());
-                    break;
-            }
-            Bundle b = new Bundle();
-            b.putString("id", list.get(i).getId());
-            option.extraInfo(b);
-            markers.add((Marker) mBaiduMap.addOverlay(option));
+
+            MarkerOptions mOption = new ShopMarkerOptions(list.get(i)).getMarkerOptions();
+            TextOptions tOption = new ShopMarkerOptions(list.get(i)).getTextOptions();
+
+            markers.add((Marker) mBaiduMap.addOverlay(mOption));
+            mBaiduMap.addOverlay(tOption);
         }
 
     }

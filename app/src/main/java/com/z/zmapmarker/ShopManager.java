@@ -72,6 +72,7 @@ public class ShopManager {
             }
 
         }
+        shop.setId(String.valueOf(shops.size()));
         shops.add(shop);
         //Insert into Database
         this.db.insertOrThrow(ShopInfoDBContract.ShopDb.TABLENAME, ShopInfoDBContract.ShopDb.COLUMN_NAME_NULLABLE, shop.toContentValues());
