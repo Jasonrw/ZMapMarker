@@ -32,8 +32,10 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.map.Overlay;
 import com.baidu.mapapi.map.TextOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.map.BaiduMap.OnMarkerDragListener;
 
 import java.lang.annotation.Target;
 import java.util.ArrayList;
@@ -43,7 +45,7 @@ import java.util.List;
  * 演示如何使用本地点收藏功能
  */
 public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
-        OnMarkerClickListener, OnMapClickListener {
+        OnMarkerClickListener, OnMapClickListener, OnMarkerDragListener {
     //初始化key验证监听器
     private SDKReceiver mReceiver;
     // 地图相关
@@ -74,7 +76,10 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
             .fromResource(R.drawable.square);
     BitmapDescriptor DQlessMark = BitmapDescriptorFactory
             .fromResource(R.drawable.circle);
+    BitmapDescriptor tempMark = BitmapDescriptorFactory
+            .fromResource(R.drawable.icon_temp);
     List<Marker> markers = new ArrayList<Marker>();
+    MarkerOptions tempMarkerOptions = new MarkerOptions();
     ShopManager mShopManager;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,6 +104,7 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
         mBaiduMap.setOnMapLongClickListener(this);
         mBaiduMap.setOnMarkerClickListener(this);
         mBaiduMap.setOnMapClickListener(this);
+        mBaiduMap.setOnMarkerDragListener(this);
         LatLng cenpt =  new LatLng(29.65,111.75);
 //定义地图状态
         MapStatus mMapStatus = new MapStatus.Builder()
@@ -343,10 +349,12 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
         showAllShops();
         //locationText.setText(String.valueOf(point.latitude) + "," + String.valueOf(point.longitude));
         currentPt = point;
-        MarkerOptions option = new MarkerOptions().icon(bdA).position(point);
+        MarkerOptions option = new MarkerOptions().icon(tempMark).position(point);
         Bundle b = new Bundle();
         b.putString("id", "temp");//临时点
         option.extraInfo(b);
+        option.draggable(true);
+        //tempMarkerOptions = option;
         markers.add((Marker) mBaiduMap.addOverlay(option));
     }
 
@@ -384,4 +392,16 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
         return false;
     }
 
+    @Override
+    public void onMarkerDragEnd(Marker marker){
+        //Toast.makeText(this,String.valueOf(marker.getPosition().latitude),Toast.LENGTH_LONG).show();
+        //marker.setAnchor(0.5f, 1.0f);
+        currentPt = marker.getPosition();
+    }
+    @Override
+    public void onMarkerDragStart(Marker marker){
+        //marker.setAnchor(0.5f,0.5f);
+    }
+    @Override
+    public void onMarkerDrag(Marker marker){}
 }

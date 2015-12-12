@@ -20,7 +20,7 @@ public class ShopMarkerOptions {
     private TextOptions mTextOptions = new TextOptions();
     private MarkerOptions mMarkerOptions = new MarkerOptions();
 
-    private int txtFontSize = 15;
+    private int txtFontSize = 30;
     private Bundle idInfo = new Bundle();
     private ArrayList<BitmapDescriptor> MarkerIcons = new ArrayList<BitmapDescriptor>();
     public ShopMarkerOptions(Shop shop){
@@ -49,9 +49,11 @@ public class ShopMarkerOptions {
     }
 
     private void initTxtOptions(){
-        mTextOptions.text(mShop.getShopName());
+        mTextOptions.text("  "+mShop.getShopName());
         mTextOptions.position(mShop.getPt());
         mTextOptions.fontSize(txtFontSize);
+        mTextOptions.rotate(30);
+        mTextOptions.align(TextOptions.ALIGN_LEFT, TextOptions.ALIGN_CENTER_VERTICAL);
         mTextOptions.extraInfo(idInfo);
     }
 
@@ -59,10 +61,13 @@ public class ShopMarkerOptions {
         mMarkerOptions.position(mShop.getPt());
         mMarkerOptions.icon(MarkerIcons.get(mShop.getDistributionQuantity()));
         mMarkerOptions.extraInfo(idInfo);
+        mMarkerOptions.anchor(0.5f, 0.5f);
+        //mMarkerOptions.title("test");
+        //mMarkerOptions.perspective(false);
     }
 
     private void initMakerIcon(){
-        MarkerIcons.add(BitmapDescriptorFactory.fromResource(R.drawable.icon_marka));//0
+        MarkerIcons.add(BitmapDescriptorFactory.fromResource(R.drawable.circleempty));//0
         MarkerIcons.add(BitmapDescriptorFactory.fromResource(R.drawable.square));//1
         MarkerIcons.add(BitmapDescriptorFactory.fromResource(R.drawable.circle));//2
         MarkerIcons.add(BitmapDescriptorFactory.fromResource(R.drawable.star));//3
