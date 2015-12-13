@@ -20,7 +20,7 @@ public class SDKReceiver extends BroadcastReceiver {
         } else if (s
                 .equals(SDKInitializer.SDK_BROADTCAST_ACTION_STRING_PERMISSION_CHECK_OK)) {
             verifyRespons = "Key for BaiduMap is verified OK!";
-            Toast.makeText(context, verifyRespons, Toast.LENGTH_LONG).show();
+            //Toast.makeText(context, verifyRespons, Toast.LENGTH_LONG).show();
         }
         else if (s
                 .equals(SDKInitializer.SDK_BROADCAST_ACTION_STRING_NETWORK_ERROR)) {

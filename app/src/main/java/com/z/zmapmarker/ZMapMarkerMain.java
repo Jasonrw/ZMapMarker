@@ -122,7 +122,7 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
 //定义地图状态
         MapStatus mMapStatus = new MapStatus.Builder()
                 .target(cenpt)
-                .zoom(20)
+                .zoom(18)
                 .build();
 //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
 
@@ -163,7 +163,7 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
 
         //定位按钮
         myLocationButton = (Button) findViewById(R.id.myLocation);
-        myLocationButton.setEnabled(false);
+
         //显示所有收藏点
         //showAllShops();
     }
@@ -250,7 +250,6 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
         MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(ll);
         mBaiduMap.animateMapStatus(u);
 
-
     }
 
     /**
@@ -266,7 +265,7 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
         mdifyName = (EditText) mModify.findViewById(R.id.modifyedittext);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(mModify);
-        String oldName = this.mShopManager.getShop(currentID).getShopName();
+        String oldName = mShopManager.getShop(currentID).getShopName();
         mdifyName.setText(oldName);
         builder.setPositiveButton("确认", new OnClickListener() {
             @Override
@@ -274,14 +273,16 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
                 String newName = mdifyName.getText().toString();
                 if (newName != null && !newName.equals("")) {
                     // modify
-                    Shop info = ShopManager.getInstance().getShop(currentID);
+                    Shop info = mShopManager.getInstance().getShop(currentID);
                     info.setShopName(newName);
-                    if (ShopManager.getInstance().updateShop(currentID, info)) {
+                    if (mShopManager.updateShop(currentID, info)) {
                         Toast.makeText(ZMapMarkerMain.this, "修改成功", Toast.LENGTH_LONG).show();
                     }
                 } else {
                     Toast.makeText(ZMapMarkerMain.this, "名称不能为空，修改失败", Toast.LENGTH_LONG).show();
                 }
+
+                showAllShops();
                 dialog.dismiss();
             }
 
@@ -305,16 +306,7 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
     public void deleteOneClick(View v) {
         if (this.mShopManager.deleteShop(currentID)) {
             Toast.makeText(ZMapMarkerMain.this, "删除点成功", Toast.LENGTH_LONG).show();
-            if (markers != null) {
-                for (int i = 0; i < markers.size(); i++) {
-                    if (markers.get(i).getExtraInfo().getString("id").equals(currentID)) {
-                        markers.get(i).remove();
-                        markers.remove(i);
-                        mBaiduMap.hideInfoWindow();
-                        break;
-                    }
-                }
-            }
+            showAllShops();
         } else {
             Toast.makeText(ZMapMarkerMain.this, "删除点失败", Toast.LENGTH_LONG).show();
         }

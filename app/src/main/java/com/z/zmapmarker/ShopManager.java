@@ -98,8 +98,8 @@ public class ShopManager {
         for(int i = 0;i<shops.size();i++){
             if(shops.get(i).getId().equals(id)){
                 shops.remove(i);
-                String[] ids = {id};
-                this.db.delete(ShopInfoDBContract.ShopDb.TABLENAME, ShopInfoDBContract.ShopDb._ID+"=",ids);
+                //String[] ids = {id};
+                this.db.delete(ShopInfoDBContract.ShopDb.TABLENAME, ShopInfoDBContract.ShopDb._ID + "=?", new String[]{id});
                 return true;
             }
         }
@@ -110,7 +110,16 @@ public class ShopManager {
     }
     public boolean updateShop(String id, Shop shop){
         //To update the specific Shop
-        return true;
+        for(int i = 0;i<shops.size();i++){
+            if(shops.get(i).getId().equals(id)){
+                shops.set(i, shop);
+                //String[] ids = {id};
+                this.db.update(ShopInfoDBContract.ShopDb.TABLENAME, shop.toContentValues(), ShopInfoDBContract.ShopDb._ID + "=?", new String[]{id});
+                return true;
+            }
+        }
+
+        return false;
     }
     public void destroy(){
         //To destroy the implement
