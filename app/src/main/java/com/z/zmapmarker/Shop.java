@@ -5,6 +5,9 @@ import android.content.ContentValues;
 
 import com.baidu.mapapi.model.LatLng;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 /**
  * Created by Administrator on 2015/11/30.
  */
@@ -61,6 +64,7 @@ public class Shop {
         CV.put(ShopInfoDBContract.ShopDb.COLUMN_NAME_DISTQUANTITY, this.DistributionQuantity);
         return CV;
     }
+
     public LatLng getPt(){
         LatLng pt = new LatLng(this.Lat,this.Lon);
         return pt;

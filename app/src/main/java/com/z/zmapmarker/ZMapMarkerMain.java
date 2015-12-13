@@ -6,22 +6,26 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
-import com.baidu.mapapi.favorite.FavoriteManager;
-import com.baidu.mapapi.favorite.FavoritePoiInfo;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BaiduMap.OnMapClickListener;
 import com.baidu.mapapi.map.BaiduMap.OnMapLongClickListener;
 import com.baidu.mapapi.map.BaiduMap.OnMarkerClickListener;
-import com.baidu.mapapi.map.BaiduMapOptions;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.InfoWindow;
@@ -32,12 +36,12 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
-import com.baidu.mapapi.map.Overlay;
+import com.baidu.mapapi.map.MyLocationConfiguration;
+import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.TextOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.map.BaiduMap.OnMarkerDragListener;
 
-import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +56,10 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
     private MapView mMapView;
     private BaiduMap mBaiduMap;
     private MapStatus mMapStatus;
+    //定位相关
+    LocationClient mLocClient;
+    boolean isFirstLoc = true; // 是否首次定位
+    BDLocation myLocation = new BDLocation();
 
     // 界面控件相关
     private EditText locationText;
@@ -62,6 +70,9 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
     private RadioButton DQnormal;
     private RadioButton DQless;
     private RadioButton DQnone;
+    //定位按钮
+    private Button myLocationButton;
+    public MyLocationListenner myListener = new MyLocationListenner();
 
     EditText mdifyName;
     // 保存点中的点id
@@ -91,9 +102,11 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
         iFilter.addAction(SDKInitializer.SDK_BROADCAST_ACTION_STRING_NETWORK_ERROR);
         mReceiver = new SDKReceiver();
         registerReceiver(mReceiver, iFilter);
+
+
         setContentView(R.layout.activity_favorite);
 
-        Intent startTrace = new Intent(this, TraceZ.class);
+        Intent startTrace = new Intent(this, DbBackService.class);
         startService(startTrace);
 
 
@@ -109,7 +122,7 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
 //定义地图状态
         MapStatus mMapStatus = new MapStatus.Builder()
                 .target(cenpt)
-                .zoom(18)
+                .zoom(20)
                 .build();
 //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
 
@@ -123,6 +136,17 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
         this.mShopManager = new ShopManager(this);
         // 初始化UI
         initUI();
+        // 开启定位图层
+        mBaiduMap.setMyLocationEnabled(true);
+        // 定位初始化
+        mLocClient = new LocationClient(this);
+        mLocClient.registerLocationListener(myListener);
+        LocationClientOption option = new LocationClientOption();
+        option.setOpenGps(true); // 打开gps
+        option.setCoorType("bd09ll"); // 设置坐标类型
+        option.setScanSpan(1000);
+        mLocClient.setLocOption(option);
+        mLocClient.start();
         //显示所有收藏点
         showAllShops();
     }
@@ -136,6 +160,10 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
         DQless = (RadioButton) findViewById(R.id.DQless);
         DQnormal = (RadioButton) findViewById(R.id.DQnormal);
         DQmass = (RadioButton) findViewById(R.id.DQmass);
+
+        //定位按钮
+        myLocationButton = (Button) findViewById(R.id.myLocation);
+        myLocationButton.setEnabled(false);
         //显示所有收藏点
         //showAllShops();
     }
@@ -198,6 +226,30 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
             return 3;
         else
             return 0;
+
+    }
+
+    /**
+     * 定位
+     */
+    public void locateMyself(View view){
+        mBaiduMap.clear();
+        showAllShops();
+        mBaiduMap
+                .setMyLocationConfigeration(new MyLocationConfiguration(
+                        MyLocationConfiguration.LocationMode.NORMAL, true, null));
+        MyLocationData locData = new MyLocationData.Builder()
+                .accuracy(myLocation.getRadius())
+                        // 此处设置开发者获取到的方向信息，顺时针0-360
+                        //.direction(100)
+                .latitude(myLocation.getLatitude())
+                .longitude(myLocation.getLongitude()).build();
+        mBaiduMap.setMyLocationData(locData);
+        LatLng ll = new LatLng(myLocation.getLatitude(),
+                myLocation.getLongitude());
+        MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(ll);
+        mBaiduMap.animateMapStatus(u);
+
 
     }
 
@@ -313,6 +365,27 @@ public class ZMapMarkerMain extends Activity implements OnMapLongClickListener,
             mBaiduMap.hideInfoWindow();
         } else {
             Toast.makeText(ZMapMarkerMain.this, "全部删除失败", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /**
+     * 定位SDK监听函数
+     */
+    public class MyLocationListenner implements BDLocationListener {
+
+        @Override
+        public void onReceiveLocation(BDLocation location) {
+            // map view 销毁后不在处理新接收的位置
+            if (location == null || mMapView == null) {
+                return;
+            }
+            myLocation = location;
+            myLocationButton.setEnabled(true);
+
+
+        }
+
+        public void onReceivePoi(BDLocation poiLocation) {
         }
     }
 

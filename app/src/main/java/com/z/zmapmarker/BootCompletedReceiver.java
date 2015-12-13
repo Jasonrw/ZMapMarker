@@ -10,7 +10,7 @@ import android.content.Intent;
 public class BootCompletedReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if(intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)){
-            Intent newIntent = new Intent(context,TraceZ.class);
+            Intent newIntent = new Intent(context,DbBackService.class);
             context.startService(newIntent);
         }
     }

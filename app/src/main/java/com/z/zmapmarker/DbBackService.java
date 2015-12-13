@@ -3,7 +3,10 @@ package com.z.zmapmarker;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.telephony.TelephonyManager;
@@ -15,7 +18,7 @@ import com.baidu.trace.OnStartTraceListener;
 import com.baidu.trace.OnStopTraceListener;
 import com.baidu.trace.Trace;
 
-public class TraceZ extends Service {
+public class DbBackService extends Service {
     protected Context mContext;
     /**
      * 轨迹服务
@@ -60,7 +63,7 @@ public class TraceZ extends Service {
      * 打包周期（单位 : 秒）
      */
     private int packInterval = 30;
-    public TraceZ() {
+    public DbBackService() {
     }
 
     @Override
@@ -83,7 +86,12 @@ public class TraceZ extends Service {
         trace = new Trace(getApplicationContext(), serviceId, entityName, traceType);
 
         //showMessage("service is creating", 0);
-
+        //设置wifi连接监听以备份数据库
+        IntentFilter wifiFilter = new IntentFilter();
+        wifiFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+        wifiFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        wifiFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(new NetworkConnectChangedReceiver(), wifiFilter);
 
     }
 
