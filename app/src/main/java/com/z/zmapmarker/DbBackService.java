@@ -97,7 +97,7 @@ public class DbBackService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int serviceId){
-        startTrace();
+
 
         // 初始化监听器
         initListener();
@@ -107,7 +107,8 @@ public class DbBackService extends Service {
 
         // 设置http请求协议类型
         setRequestType();
-        //showMessage("service started", 1);
+        startTrace();
+        showMessage("service started", 1);
         return 0;
     }
 

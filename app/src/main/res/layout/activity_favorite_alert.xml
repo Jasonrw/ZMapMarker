@@ -2,8 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 				      android:layout_width="300dip"
 				      android:layout_height="wrap_content"
-				      android:orientation="horizontal" >
-
+				      android:orientation="vertical" >
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/modifyName">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="40dip"
@@ -23,7 +26,49 @@
 
                         <requestFocus />
                     </EditText>
-				
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/modifyName">
+    <TextView
+        android:id="@+id/DQ"
+        android:paddingTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="铺货率：" />
+
+    <RadioGroup
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/DQRadioGroup">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/DQmass"
+            android:text="多"/>
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/DQnormal"
+            android:text="中"/>
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/DQless"
+            android:text="少"/>
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:id="@+id/DQnone"
+            android:text="无"/>
+
+    </RadioGroup>
+    </LinearLayout>
 			
                 
       

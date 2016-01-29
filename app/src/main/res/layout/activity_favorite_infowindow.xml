@@ -12,7 +12,8 @@
           android:layout_weight="1.0"
           android:onClick="modifyClick"
           android:background= "@android:color/transparent"
-          android:text="修改" />
+          android:text="修改"
+          android:textColor="#ff0504ff" />
 
       <Button
           android:id="@+id/deleteone"
@@ -21,6 +22,7 @@
           android:layout_weight="1.0"
           android:onClick="deleteOneClick"
           android:background= "@android:color/transparent"
-          android:text="删除" />
+          android:text="删除"
+          android:textColor="#ff1109ff" />
 
   </LinearLayout>
