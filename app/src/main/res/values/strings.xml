@@ -3,4 +3,10 @@
 
     <string name="hello_world">哈哈，笨崽崽！!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_zmap_marker_main">ZMapMarker</string>
+    <string name="HotButtonContentDescription">show the hot image on the map</string>
+    <string name="locateButtonContentDesc">show your location on the map</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

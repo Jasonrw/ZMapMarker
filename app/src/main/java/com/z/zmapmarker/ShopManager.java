@@ -1,130 +1,62 @@
 package com.z.zmapmarker;
 
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.baidu.mapapi.common.Logger;
-import com.baidu.mapapi.model.LatLng;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Random;
 
 /**
- * Created by Administrator on 2015/11/30.
+ * Created by Administrator on 2016/3/1.
  */
 public class ShopManager {
-    private ArrayList<Shop> shops = new ArrayList();
-    private static Context context;
-    private ShopInfoDBHelper mDBHelper;
-    private SQLiteDatabase db;
-    public ShopManager(Context context){
-        //init the ShopManager sync the database
-        this.context = context;
-        this.mDBHelper = new ShopInfoDBHelper(context);
-        this.db = mDBHelper.getWritableDatabase();
-        String[] projection ={
-                ShopInfoDBContract.ShopDb._ID,
-                ShopInfoDBContract.ShopDb.COLUMN_NAME_SHOPNAME,
-                ShopInfoDBContract.ShopDb.COLUMN_NAME_LAT,
-                ShopInfoDBContract.ShopDb.COLUMN_NAME_LON,
-                ShopInfoDBContract.ShopDb.COLUMN_NAME_DISTQUANTITY
-        };
-        Cursor cursor = this.db.query(
-                ShopInfoDBContract.ShopDb.TABLENAME,
-                projection,
-                null,
-                null,
-                null,
-                null,
-                null
-        );
-        //如果cursor不为空就同步数据库中的结果
-        if(cursor.getCount()>0)
-        {
-            cursor.moveToFirst();
-            do{
-                String tempID = cursor.getString(cursor.getColumnIndexOrThrow(ShopInfoDBContract.ShopDb._ID));
-                String tempShopName = cursor.getString(cursor.getColumnIndexOrThrow(ShopInfoDBContract.ShopDb.COLUMN_NAME_SHOPNAME));
-                double tempLat = cursor.getDouble(cursor.getColumnIndexOrThrow(ShopInfoDBContract.ShopDb.COLUMN_NAME_LAT));
-                double tempLon = cursor.getDouble(cursor.getColumnIndexOrThrow(ShopInfoDBContract.ShopDb.COLUMN_NAME_LON));
-                int tempDistQuantity = cursor.getInt(cursor.getColumnIndexOrThrow(ShopInfoDBContract.ShopDb.COLUMN_NAME_DISTQUANTITY));
-                Shop tempShop = new Shop(tempID, tempShopName, tempLat, tempLon, tempDistQuantity);
-                this.shops.add(tempShop);
-
-
-            }while(cursor.moveToNext());
-        }
-    }
-    public int add(Shop shop){
-        //To add single shopInfo to the manager and database
-        //验证是否是同一个点
-        LatLng pt = shop.getPt();
-        LatLng tmpPt;
-        Iterator<Shop> iterShop = shops.iterator();
-        while(iterShop.hasNext()){
-            Shop cShop = iterShop.next();
-            tmpPt = cShop.getPt();
-            if(tmpPt.latitude == pt.latitude && tmpPt.longitude == pt.longitude){
-                //Logger.logD("shop ------->", String.valueOf(shop.getLat()));
-                //System.out.print("shops ------->" + cShop.getLat());
-                return 1;
-            }
-
-        }
-        shop.setId(String.valueOf(shops.size()));
-        shops.add(shop);
-        //Insert into Database
-        this.db.insertOrThrow(ShopInfoDBContract.ShopDb.TABLENAME, ShopInfoDBContract.ShopDb.COLUMN_NAME_NULLABLE, shop.toContentValues());
-        return 0;
-    }
-    public Shop getShop(String id){
-        //To return the specific Shop according to the id
-        Iterator<Shop> iterShop = this.shops.iterator();
-        while(iterShop.hasNext()){
-            Shop result = iterShop.next();
-            if(result.getId().equals(id))
-                return result;
-        }
-        return null;//return null when can not find the id
-    }
-    public ArrayList<Shop> getAllShop(){
-        //To return all Shop Info
-        return shops;
-    }
-
-    public boolean deleteShop(String id){
-        //To delete the specific Shop
-        for(int i = 0;i<shops.size();i++){
-            if(shops.get(i).getId().equals(id)){
-                shops.remove(i);
-                //String[] ids = {id};
-                this.db.delete(ShopInfoDBContract.ShopDb.TABLENAME, ShopInfoDBContract.ShopDb._ID + "=?", new String[]{id});
-                return true;
-            }
-        }
-        return false;
-    }
-    public boolean deleteAll(){
+    private ArrayList allShops = new ArrayList<Shop>();
+    //初始化
+    public boolean init(){
         return true;
     }
-    public boolean updateShop(String id, Shop shop){
-        //To update the specific Shop
-        for(int i = 0;i<shops.size();i++){
-            if(shops.get(i).getId().equals(id)){
-                shops.set(i, shop);
-                //String[] ids = {id};
-                this.db.update(ShopInfoDBContract.ShopDb.TABLENAME, shop.toContentValues(), ShopInfoDBContract.ShopDb._ID + "=?", new String[]{id});
-                return true;
-            }
+    //用所有的shops来初始化
+    public boolean init(ArrayList<Shop> shops){
+        try {
+            allShops = (ArrayList) shops.clone();
+            return true;
+        }
+        catch (Exception e){
+            Log.e("error1:",e.toString());
+        }
+        return false;
+    }
+
+    public boolean add(Shop newShop){
+        if(newShop == null){
+            return false;
+        }
+        if(newShop.getName().equals(null)){
+            return false;
+        }
+        allShops.add(newShop);
+        return true;
+    }
+    public static boolean uploadShop(Shop shop){
+        try {
+            new Thread(new shopUploadThread(shop)).start();
+        }catch (Exception e){
+            e.printStackTrace();
         }
 
         return false;
     }
-    public void destroy(){
-        //To destroy the implement
+    public static Shop genShop(){
+        Shop newShop = new Shop();
+        int randamId = new Random().nextInt();
+        newShop.setId(randamId);
+        newShop.setLatitude(29.64162);
+        newShop.setLongitude(111.763068);
+        newShop.setName("叫啥名字好呢2");
+        newShop.setQuantity(2);
+        newShop.setRefLocation("澧州大饭店附近");
+        return newShop;
     }
-    public static ShopManager getInstance(){
-        return new ShopManager(context);
-    }
+
 }
