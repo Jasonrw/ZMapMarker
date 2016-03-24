@@ -1,8 +1,10 @@
-package com.z.zmapmarker;
+package com.z.zmapmarker.consistant;
 
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
+
+import com.z.zmapmarker.entity.Shop;
 
 import okhttp3.MediaType;
 import okhttp3.Request;

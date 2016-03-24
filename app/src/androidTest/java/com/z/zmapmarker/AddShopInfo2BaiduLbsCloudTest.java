@@ -1,8 +1,8 @@
 package com.z.zmapmarker;
 import android.test.InstrumentationTestCase;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
+import com.z.zmapmarker.entity.Shop;
+import com.z.zmapmarker.entity.ShopManager;
 
 import java.util.Random;
 

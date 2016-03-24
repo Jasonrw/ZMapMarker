@@ -1,4 +1,4 @@
-package com.z.zmapmarker;
+package com.z.zmapmarker.consistant;
 
 import android.app.Activity;
 import android.content.Context;

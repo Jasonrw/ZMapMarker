@@ -1,4 +1,4 @@
-package com.z.zmapmarker;
+package com.z.zmapmarker.entity;
 
 import android.content.Context;
 import android.util.Log;

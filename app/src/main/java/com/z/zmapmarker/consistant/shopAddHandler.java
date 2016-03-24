@@ -1,4 +1,4 @@
-package com.z.zmapmarker;
+package com.z.zmapmarker.consistant;
 
 import android.os.Bundle;
 import android.os.Message;

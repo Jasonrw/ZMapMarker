@@ -1,4 +1,4 @@
-package com.z.zmapmarker;
+package com.z.zmapmarker.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import android.view.Window;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.z.zmapmarker.R;
+import com.z.zmapmarker.entity.ShopManager;
 
 
 public class ZMapMarkerMain extends Activity {

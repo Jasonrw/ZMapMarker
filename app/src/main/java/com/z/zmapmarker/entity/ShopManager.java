@@ -1,8 +1,8 @@
-package com.z.zmapmarker;
+package com.z.zmapmarker.entity;
 
 import android.util.Log;
 
-import com.baidu.mapapi.common.Logger;
+import com.z.zmapmarker.consistant.shopUploadThread;
 
 import java.util.ArrayList;
 import java.util.Random;
