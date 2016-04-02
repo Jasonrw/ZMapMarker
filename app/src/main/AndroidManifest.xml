@@ -59,11 +59,11 @@
 
 
         <activity
-            android:name=".ui.ZMapMarkerMain"
+            android:name=".UI.ZMapMarkerMain"
             android:label="@string/title_activity_zmap_marker_main" >
 
         </activity>
-        <activity android:name=".ui.UnUploadListActivity"
+        <activity android:name=".UI.UnUploadListActivity"
 
             >
             <intent-filter>

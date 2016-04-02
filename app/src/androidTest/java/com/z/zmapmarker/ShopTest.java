@@ -3,7 +3,7 @@ package com.z.zmapmarker;
 import android.test.InstrumentationTestCase;
 import android.util.Log;
 
-import com.z.zmapmarker.entity.Shop;
+import com.z.zmapmarker.Entity.Shop;
 
 import org.json.JSONObject;
 

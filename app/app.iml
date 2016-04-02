@@ -86,6 +86,9 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 19 Platform (1)" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" exported="" name="greendao-generator-2.1.0" level="project" />
+    <orderEntry type="library" exported="" name="freemarker-2.3.23" level="project" />
+    <orderEntry type="library" exported="" name="greendao-2.1.0" level="project" />
     <orderEntry type="module" module-name="library" exported="" />
   </component>
 </module>

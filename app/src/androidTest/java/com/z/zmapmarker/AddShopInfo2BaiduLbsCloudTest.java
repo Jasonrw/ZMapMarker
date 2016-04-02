@@ -1,8 +1,8 @@
 package com.z.zmapmarker;
 import android.test.InstrumentationTestCase;
 
-import com.z.zmapmarker.entity.Shop;
-import com.z.zmapmarker.entity.ShopManager;
+import com.z.zmapmarker.Entity.Shop;
+import com.z.zmapmarker.Entity.ShopManager;
 
 import java.util.Random;
 

@@ -4,9 +4,9 @@ import android.test.InstrumentationTestCase;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.z.zmapmarker.consistant.Add2BaiduByVolley;
-import com.z.zmapmarker.entity.Shop;
-import com.z.zmapmarker.entity.ShopManager;
+import com.z.zmapmarker.Consistant.Remote.Add2BaiduByVolley;
+import com.z.zmapmarker.Entity.Shop;
+import com.z.zmapmarker.Entity.ShopManager;
 
 /**
  * Created by Administrator on 2016/3/21.
