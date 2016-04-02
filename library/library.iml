@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id=":app" external.linked.project.path="$MODULE_DIR$" external.root.project.path="$MODULE_DIR$/.." external.system.id="GRADLE" external.system.module.group="ZMapMarker" external.system.module.version="unspecified" type="JAVA_MODULE" version="4">
+<module external.linked.project.id=":library" external.linked.project.path="$MODULE_DIR$" external.root.project.path="$MODULE_DIR$/.." external.system.id="GRADLE" external.system.module.group="ZMapMarker" external.system.module.version="unspecified" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="android-gradle" name="Android-Gradle">
       <configuration>
-        <option name="GRADLE_PROJECT_PATH" value=":app" />
+        <option name="GRADLE_PROJECT_PATH" value=":library" />
       </configuration>
     </facet>
     <facet type="android" name="Android">
@@ -21,6 +21,7 @@
         <option name="RES_FOLDER_RELATIVE_PATH" value="/src/main/res" />
         <option name="RES_FOLDERS_RELATIVE_PATH" value="file://$MODULE_DIR$/src/main/res" />
         <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/src/main/assets" />
+        <option name="LIBRARY_PROJECT" value="true" />
       </configuration>
     </facet>
   </component>
@@ -41,13 +42,13 @@
       <sourceFolder url="file://$MODULE_DIR$/build/generated/source/rs/androidTest/debug" isTestSource="true" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/build/generated/res/rs/androidTest/debug" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/build/generated/res/generated/androidTest/debug" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/build-types/debug/res" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/build-types/debug/resources" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/build-types/debug/assets" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/build-types/debug/aidl" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/build-types/debug/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/build-types/debug/jni" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/build-types/debug/rs" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/debug/res" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/debug/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/debug/assets" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/debug/aidl" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/debug/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/debug/jni" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/debug/rs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/res" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/assets" type="java-resource" />
@@ -84,8 +85,20 @@
       <excludeFolder url="file://$MODULE_DIR$/build/outputs" />
       <excludeFolder url="file://$MODULE_DIR$/build/tmp" />
     </content>
-    <orderEntry type="jdk" jdkName="Android API 19 Platform (1)" jdkType="Android SDK" />
+    <orderEntry type="jdk" jdkName="Android API 22 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="library" exported="" />
+    <orderEntry type="library" exported="" name="baidumapapi_map_v3_6_1" level="project" />
+    <orderEntry type="library" exported="" name="okio-1.6.0" level="project" />
+    <orderEntry type="library" exported="" name="httpclientandroidlib-1.2.1" level="project" />
+    <orderEntry type="library" exported="" name="baidumapapi_radar_v3_6_1" level="project" />
+    <orderEntry type="library" exported="" name="volley" level="project" />
+    <orderEntry type="library" exported="" name="BaiduTraceSDK_v2_1_0" level="project" />
+    <orderEntry type="library" exported="" name="baidumapapi_search_v3_6_1" level="project" />
+    <orderEntry type="library" exported="" name="gson-2.2.1" level="project" />
+    <orderEntry type="library" exported="" name="baidumapapi_cloud_v3_6_1" level="project" />
+    <orderEntry type="library" exported="" name="okhttp-3.2.0" level="project" />
+    <orderEntry type="library" exported="" name="baidumapapi_base_v3_6_1" level="project" />
+    <orderEntry type="library" exported="" name="locSDK_6.13" level="project" />
+    <orderEntry type="library" exported="" name="baidumapapi_util_v3_6_1" level="project" />
   </component>
 </module>

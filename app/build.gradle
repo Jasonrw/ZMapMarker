@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 19
-    buildToolsVersion '19.1.0'
+    buildToolsVersion '23.0.1'
 
     sourceSets {
         main {
@@ -45,9 +45,6 @@ dependencies {
     //compile 'com.android.support:appcompat-v7:22.1.1'
     //compile 'com.android.support:support-v13:22.1.1'
     //compile files('libs/BaiduTraceSDK_v2_1_0.jar')
-    compile files('libs/volley.jar')
-    compile files('libs/okhttp-3.2.0.jar')
-    compile files('libs/okio-1.6.0.jar')
-    compile files('libs/httpclientandroidlib-1.2.1.jar')
+    compile project(':library')
 }
 

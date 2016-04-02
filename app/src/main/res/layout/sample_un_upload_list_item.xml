@@ -1,0 +1,25 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:id="@+id/unUploadListItem">
+
+    <TextView
+        android:id="@+id/shopName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="门店1"
+        android:textSize="20sp" />
+    <Button
+        android:id="@+id/reUpload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="重新上传"
+        android:layout_alignParentEnd="true"/>
+    <TextView
+        android:id="@+id/unUploadListItemAddr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="地址1"
+        android:layout_below="@+id/shopName"/>
+
+</RelativeLayout>
